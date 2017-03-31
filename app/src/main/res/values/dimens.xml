@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="box_height">40dp</dimen>
+    <dimen name="box_width">150dp</dimen>
+    <dimen name="box_width_large">160dp</dimen>
+    <dimen name="drag_default_height">150dp</dimen>
+
+
+    <dimen name="box_height_wxtk">30dp</dimen>
+    <dimen name="box_width_wxtk">120dp</dimen>
+    <dimen name="box_width_large_wxtk">130dp</dimen>
+</resources>
