@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.colin.tiankong.customview.DragSlopLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.lin.yuantiku.ui.customview.DragSlopLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drag_layout"
     android:layout_width="match_parent"
@@ -63,4 +63,4 @@
             android:layout_height="wrap_content"
             android:background="@color/white" />
     </LinearLayout>
-</com.colin.tiankong.customview.DragSlopLayout>
+</com.lin.yuantiku.ui.customview.DragSlopLayout>

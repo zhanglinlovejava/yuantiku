@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TianKong</string>
+    <string name="app_name">猿题库</string>
     <string name="body_wxtk">Even though my parents were married for well over fifty years,*input  I still felt that they stayed together \"for the sake of the children\". *input At eight-five years old, Dad a stroke(中风). While he was recovering in the hospital,At eight-five years old, Da  While he was recovering in the hospital,*input At eight-five years old, Dad a stroke(中风). While he was recovering in the hospital," +At eight-five years old, Dad a st e was recovering in the hospital,*input At eight-five years old, Dad *input I still felt that they stayed together \"for the sake of the children\". At eight-five years old, Dad a stroke(中风). While he was recovering in the hospital,At eight-five years old, Da  While he was recovering in the hospital,*input At eight-five years old, Dad a stroke(中风). While he was recovering in the hospital,At eight-five years old, Dad a st e was recovering in the hospital,*input At eight-five years old, Dad  *input While he was recovering in the hospital,*inputWe found an association between an increasing number of wives*input and the severity and number of coronary blockages,” stated Dr. Amin Daoulah,inputa cardiologist at the King Faisal Specialist Hospital and Research Centre in Jeddah,*inputSaudi Arabia, in regards to his research, *input which was presented at the 2015 Asian Pacific Society of Cardiology Congress."*input I saw l over fifty yearsI still felt that they stayed together parents</string>
     <string name="body">    Persons moving from a rural area to the big city may not realize that there are many methods of transportation available in the city. Many of them do not involve driving your own car.
     One of the first methods of transportation that you will notice quickly is the bus service. Bus stops are located nearby many residential areas and buses travel toward a central transportation hub. If you work near downtown, it is often very easy to catch a bus that will take you to a location that is within a few blocks of your place of work. If there is not a bus stop near your home, look for a "park and ride" lot. Often you can park your vehicle there for free and take the bus. Using bus service helps to save fuel, the frustration of having to drive in rush hours and parking fees. A monthly bus pass often costs less than monthly parking fees.
@@ -16,5 +16,38 @@
 　　舞台剧方面，2003年哈迪荣获《标准晚报》颁发的新人奖，次年又被劳伦斯·奥利弗奖提名最佳新人。2004年他出演了马修·沃恩执导的英式黑帮片《夹心蛋糕》，与丹尼尔·克雷格、西椰娜·米勒以及本·威士肖同台。他还出演过电视剧《童贞女王-伊丽莎白一世》，以及电视片《吉昂的女儿》、《雾都孤儿》等。2008年凭借电视片《斯图尔特：逆行人生》被英国影视艺术学院奖提名最佳男演员。他将在新版的《呼啸山庄》中扮演希斯克里夫。\n
 　　大银幕上，2008年哈迪亮相了盖·里奇的《摇滚帮》，还加盟了摩根·弗里曼、安东尼奥·班德拉斯主演的《亲密如贼》。他主演的动作片《布朗森》将在08年1月的圣丹斯电影节首映，他在片中的演技大受好评。\n
 　　2009年，哈迪获邀加盟克里斯托弗·诺兰执导的大片《盗梦空间》，在其中饰演梦境伪造师伊姆斯，该片在2010年上映后的大热为哈迪铺就灿烂星路，顺利进军好莱坞。随后哈迪作品迭出，有爱情喜剧《情敌大战》、众星云集的《锅匠，裁缝，士兵，间谍》、经典童话黑暗版《白雪公主与猎人》、诺兰的《蝙蝠侠前传3：黑暗骑士崛起》、接棒梅尔·吉布森出演的《疯狂的麦克斯4》，前途不可限量。\n</string>
+
+
+    <array name="gsw_array">
+        <item>（2016南昌一模）万里悲秋常作客，*input。（杜甫《登高》）</item>
+        <item>（2016南昌一模）别有幽愁暗恨生，*input。（白居易《琵琶行》）</item>
+        <item>（2016南昌一模）想当年，金戈铁马，*input。（辛弃疾《京口贝古亭怀古》）</item>
+        <item>（2016南昌一模）*input,往来无白丁。（刘禹锡《》陋室铭）</item>
+        <item>（2016南昌一模）*input，而神明自得，圣心备焉（荀子《劝学》）</item>
+        <item>（2016南昌一模）《出师表》中，诸葛亮回顾自己当初临危受命的两句是*input，*input。</item>
+    </array>
+
+    <array name="read_title_array">
+        <item>
+            In your class, if some students’ English is very good, but others is very poor,     What will you do?
+        </item>
+        <item>（In your opinion, what is a good teacher in English teaching?</item>
+        <item>Can you introduce yourself in English briefly?</item>
+        <item>Can you name some ways to compliment or to praise your students?</item>
+        <item>Can you name some ways to compliment or to praise your students?</item>
+        <item>Can you name some ways to compliment or to praise your students?</item>
+    </array>
+    <array name="read_item">
+        <item>place</item>
+        <item>room</item>
+        <item>floor</item>
+        <item>ground</item>
+    </array>
+    <array name="read_item_cat">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+    </array>
 </resources>
 
