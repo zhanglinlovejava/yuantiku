@@ -50,12 +50,12 @@ public class ChooseItemFragment extends BaseFragment implements BaseAdapter.OnRe
         List<ChooseItem> list = adapter.getData();
         if (list.get(postion).isChoosed) {
             list.get(postion).isChoosed = false;
-            adapter.notifyDataSetChanged();
         } else {
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).isChoosed = (postion == i);
             }
         }
+        adapter.notifyDataSetChanged();
         RxBus.getDefault().post(new EventUpdateChooseWXTK(index, list.get(postion).isChoosed, list.get(postion).body));
     }
 
