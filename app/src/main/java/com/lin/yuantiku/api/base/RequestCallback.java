@@ -1,7 +1,7 @@
 package com.lin.yuantiku.api.base;
 
 /**
- * Created by lijinhua on 2016/5/17.
+ * Created by zhanglin on 2016/5/17.
  */
 public interface RequestCallback<T> {
 
