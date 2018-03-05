@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.Log;
@@ -17,47 +16,84 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.lin.yuantiku.R;
+import com.lin.yuantiku.entity.ChooseItem;
+import com.lin.yuantiku.entity.ChooseItemParent;
 import com.lin.yuantiku.ui.adapter.WXTKChoosePagerAdapter;
 import com.lin.yuantiku.ui.customview.MTextView;
 import com.lin.yuantiku.ui.customview.ViewPagerNoScroll;
-import com.lin.yuantiku.entity.ChooseItem;
-import com.lin.yuantiku.entity.ChooseItemParent;
-import com.lin.yuantiku.utils.RxBus;
+import com.lin.yuantiku.ui.presenter.WXTKPresenter;
 import com.lin.yuantiku.utils.ScreenUtil;
 import com.lin.yuantiku.utils.event.EventUpdateChooseWXTK;
+import com.lin.yuantiku.view.WXTKView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import rx.Subscription;
-import rx.functions.Action1;
+import javax.inject.Inject;
 
-public class WXTKActivity extends FragmentActivity {
-    private MTextView mTextView;
-    private RelativeLayout relativeLayout;
-    private ViewPagerNoScroll mViewPager;
+import butterknife.BindView;
+import butterknife.OnClick;
+
+public class WXTKActivity extends BaseActivity implements WXTKView {
+    @BindView(R.id.mtextview)
+    MTextView mTextView;
+    @BindView(R.id.viewPager)
+    ViewPagerNoScroll mViewPager;
+    @BindView(R.id.rlParent)
+    RelativeLayout relativeLayout;
+
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
+    @BindView(R.id.loadingView)
+    View loadingView;
+    @Inject
+    WXTKPresenter mPresenter;
     private WXTKChoosePagerAdapter pagerAdapter;
-    private ScrollView scrollView;
     private List<TextView> textViews = new ArrayList<>();
-    private Subscription subscription;
-    private View loadingView;
+    private Handler mHandler = new Handler();
+    private Runnable mTextViewRunnable = new Runnable() {
+        @Override
+        public void run() {
+            addTextView();
+            hideLoading();
+        }
+    };
+
+    private class ScrollRunnable implements Runnable {
+        private View view;
+
+        public void setView(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public void run() {
+            scrollView.scrollBy(0, 30);
+            scrollBy(view);
+        }
+    }
+
+    private ScrollRunnable mScrollRunnable = new ScrollRunnable();
 
     public static void actionLaunch(Context context) {
         context.startActivity(new Intent(context, WXTKActivity.class));
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_wxtk);
-        mTextView = (MTextView) this.findViewById(R.id.mtextview);
-        relativeLayout = (RelativeLayout) findViewById(R.id.rlParent);
-        mViewPager = (ViewPagerNoScroll) findViewById(R.id.viewPager);
-        scrollView = (ScrollView) findViewById(R.id.scrollView);
-        loadingView = findViewById(R.id.loadingView);
+    public int setContentView() {
+        return R.layout.act_wxtk;
+    }
+
+    @Override
+    public void initUIAndData(Bundle savedInstanceState) {
+        mPresenter.attachView(this);
         initTextContent();
-        registerObserver();
+    }
+
+    @Override
+    public void initInjector() {
+        mActivityComponent.inject(this);
     }
 
     public void hideLoading() {
@@ -77,23 +113,15 @@ public class WXTKActivity extends FragmentActivity {
         mTextView.setTextSize(15);
         mTextView.setTextColor(Color.BLACK);
         mTextView.invalidate();
-        mTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mViewPager.isShown()) {
-                    resetTextView();
-                    mViewPager.setVisibility(View.GONE);
-                }
+        mHandler.postDelayed(mTextViewRunnable, 200);
+    }
 
-            }
-        });
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                addTextView();
-                hideLoading();
-            }
-        }, 200);
+    @OnClick(R.id.mtextview)
+    void click() {
+        if (mViewPager.isShown()) {
+            resetTextView();
+            mViewPager.setVisibility(View.GONE);
+        }
     }
 
     private void addTextView() {
@@ -135,13 +163,8 @@ public class WXTKActivity extends FragmentActivity {
         v.getLocationOnScreen(location);
         int y = location[1] + 10;
         if (y > mViewPager.getTop() - ScreenUtil.dip2px(10)) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    scrollView.scrollBy(0, 30);
-                    scrollBy(v);
-                }
-            }, 10);
+            mScrollRunnable.setView(v);
+            mHandler.postDelayed(mScrollRunnable, 10);
         }
     }
 
@@ -181,39 +204,35 @@ public class WXTKActivity extends FragmentActivity {
         mViewPager.setCurrentItem(0);
     }
 
-    private void registerObserver() {
-        subscription = RxBus.getDefault().toObserverable(EventUpdateChooseWXTK.class).subscribe(new Action1<EventUpdateChooseWXTK>() {
-            @Override
-            public void call(EventUpdateChooseWXTK eventUpdateChoose) {
-                TextView tv = textViews.get(eventUpdateChoose.index);
-                if (eventUpdateChoose.isChoosed) {
-                    tv.setText((eventUpdateChoose.index + 1) + " " + eventUpdateChoose.body);
-                    tv.setBackgroundResource(R.drawable.testbg_trans);
-                    tv.setTextColor(Color.BLACK);
-                    if (eventUpdateChoose.index + 1 < pagerAdapter.getCount()) {
-                        if (textViews.get(eventUpdateChoose.index + 1).getText().length() <= 2) {
-                            textViews.get(eventUpdateChoose.index + 1).setBackgroundResource(R.drawable.testbg_low);
-                            mViewPager.setCurrentItem(eventUpdateChoose.index + 1);
-                            scrollBy(textViews.get(eventUpdateChoose.index + 1));
-                            return;
-                        }
-                        mViewPager.setVisibility(View.GONE);
-                    }
-                } else {
-                    tv.setTextColor(Color.WHITE);
-                    tv.setText((eventUpdateChoose.index + 1) + " ");
-                    tv.setBackgroundResource(R.drawable.testbg);
+    @Override
+    public void updateChoose(EventUpdateChooseWXTK eventUpdateChoose) {
+        TextView tv = textViews.get(eventUpdateChoose.index);
+        if (eventUpdateChoose.isChoosed) {
+            tv.setText((eventUpdateChoose.index + 1) + " " + eventUpdateChoose.body);
+            tv.setBackgroundResource(R.drawable.testbg_trans);
+            tv.setTextColor(Color.BLACK);
+            if (eventUpdateChoose.index + 1 < pagerAdapter.getCount()) {
+                if (textViews.get(eventUpdateChoose.index + 1).getText().length() <= 2) {
+                    textViews.get(eventUpdateChoose.index + 1).setBackgroundResource(R.drawable.testbg_low);
+                    mViewPager.setCurrentItem(eventUpdateChoose.index + 1);
+                    scrollBy(textViews.get(eventUpdateChoose.index + 1));
+                    return;
                 }
-
+                mViewPager.setVisibility(View.GONE);
             }
-        });
+        } else {
+            tv.setTextColor(Color.WHITE);
+            tv.setText((eventUpdateChoose.index + 1) + " ");
+            tv.setBackgroundResource(R.drawable.testbg);
+        }
     }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscription != null && !subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
-        }
+        mHandler.removeCallbacks(mTextViewRunnable);
+        mHandler.removeCallbacks(mScrollRunnable);
+        mPresenter.detachView();
     }
 }

@@ -46,6 +46,15 @@ public class ChildFragment extends BaseFragment {
     @BindView(R.id.loadingView)
     View loadingView;
 
+    private Handler mHandler = new Handler();
+    private Runnable mTextViewRunnable = new Runnable() {
+        @Override
+        public void run() {
+            addTextView();
+            hideLoading();
+        }
+    };
+
     public static ChildFragment getInstance(ChooseItem chooseItem) {
         ChildFragment cf = new ChildFragment();
         Bundle bundle = new Bundle();
@@ -94,13 +103,7 @@ public class ChildFragment extends BaseFragment {
         mTextView.setTextSize(15);
         mTextView.setTextColor(Color.BLACK);
         mTextView.invalidate();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                addTextView();
-                hideLoading();
-            }
-        }, 200);
+        mHandler.postDelayed(mTextViewRunnable, 200);
     }
 
     private void addTextView() {
@@ -156,6 +159,12 @@ public class ChildFragment extends BaseFragment {
 
     @Override
     public void initInjector() {
-            mFragmentComponent.inject(this);
+        mFragmentComponent.inject(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mHandler.removeCallbacks(mTextViewRunnable);
     }
 }

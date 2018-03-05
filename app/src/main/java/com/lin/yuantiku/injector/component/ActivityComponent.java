@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.lin.yuantiku.injector.module.ActivityModule;
 import com.lin.yuantiku.injector.scoped.PerActivity;
 import com.lin.yuantiku.ui.activity.GSWActivity;
+import com.lin.yuantiku.ui.activity.WXTKActivity;
 import com.lin.yuantiku.ui.activity.YDLJActivity;
 
 import dagger.Component;
@@ -20,6 +21,8 @@ public interface ActivityComponent {
     void inject(YDLJActivity activity);
 
     void inject(GSWActivity activity);
+
+    void inject(WXTKActivity activity);
 
 
 }

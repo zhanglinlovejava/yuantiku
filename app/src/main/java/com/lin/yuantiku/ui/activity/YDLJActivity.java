@@ -11,21 +11,23 @@ import com.lin.yuantiku.entity.ChooseItem;
 import com.lin.yuantiku.ui.adapter.ReadPagerAdapter;
 import com.lin.yuantiku.ui.fragment.ReadFragment;
 import com.lin.yuantiku.ui.fragment.ResultFragment;
-import com.lin.yuantiku.utils.RxBus;
-import com.lin.yuantiku.utils.event.EventShowResult;
+import com.lin.yuantiku.ui.presenter.YDLJPresenter;
+import com.lin.yuantiku.view.YDLJView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.functions.Action1;
-import rx.subscriptions.CompositeSubscription;
+import javax.inject.Inject;
 
-public class YDLJActivity extends BaseActivity {
-    private ViewPager viewPager;
+import butterknife.BindView;
+
+public class YDLJActivity extends BaseActivity implements YDLJView {
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
     private ReadPagerAdapter pagerAdapter;
     private List<Fragment> fragments = new ArrayList<>();
-    private CompositeSubscription subscriptions;
-
+    @Inject
+    YDLJPresenter mPresenter;
 
     public static void actionLaunch(Context context) {
         context.startActivity(new Intent(context, YDLJActivity.class));
@@ -33,13 +35,13 @@ public class YDLJActivity extends BaseActivity {
 
 
     private void initView() {
+        mPresenter.attachView(this);
         String[] titles = getResources().getStringArray(R.array.read_title_array);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
         fragments.add(ReadFragment.getInstance(titles));
         ArrayList<ChooseItem> list = new ArrayList<>();
         for (int i = 0; i < titles.length; i++) {
             ChooseItem ci = new ChooseItem();
-            ci.cat_name = String.valueOf(i+1);
+            ci.cat_name = String.valueOf(i + 1);
             list.add(ci);
         }
         fragments.add(ResultFragment.getInstance(list));
@@ -48,23 +50,16 @@ public class YDLJActivity extends BaseActivity {
         viewPager.setCurrentItem(0);
     }
 
-    private void registerObserver() {
-        subscriptions = new CompositeSubscription();
-        subscriptions.add(RxBus.getDefault().toObserverable(EventShowResult.class)
-                .subscribe(new Action1<EventShowResult>() {
-                    @Override
-                    public void call(EventShowResult eventShowResult) {
-                        viewPager.setCurrentItem(0);
-                    }
-                }));
+
+    @Override
+    public void updateViewPagerIndex(int index) {
+        viewPager.setCurrentItem(index);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (subscriptions != null && !subscriptions.isUnsubscribed()) {
-            subscriptions.unsubscribe();
-        }
+        mPresenter.detachView();
     }
 
     @Override
@@ -75,7 +70,6 @@ public class YDLJActivity extends BaseActivity {
     @Override
     public void initUIAndData(Bundle savedInstanceState) {
         initView();
-        registerObserver();
     }
 
     @Override
